@@ -17,3 +17,4 @@ C:\Users\rohan\Desktop\Codecamp\MiniOrmProject\MiniOrm\obj\Debug\net10.0\refint\
 C:\Users\rohan\Desktop\Codecamp\MiniOrmProject\MiniOrm\obj\Debug\net10.0\MiniOrm.pdb
 C:\Users\rohan\Desktop\Codecamp\MiniOrmProject\MiniOrm\obj\Debug\net10.0\MiniOrm.genruntimeconfig.cache
 C:\Users\rohan\Desktop\Codecamp\MiniOrmProject\MiniOrm\obj\Debug\net10.0\ref\MiniOrm.dll
+C:\Users\rohan\Desktop\Codecamp\MiniOrmProject\MiniOrm\obj\Debug\net10.0\MiniOrm.sourcelink.json
