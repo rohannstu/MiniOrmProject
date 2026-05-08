@@ -191,11 +191,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\MiniOrm.csproj",
+      "projectUniqueName": "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\MiniOrm.csproj",
       "projectName": "MiniOrm",
-      "projectPath": "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\MiniOrm.csproj",
+      "projectPath": "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\MiniOrm.csproj",
       "packagesPath": "C:\\Users\\rohan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\obj\\",
+      "outputPath": "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

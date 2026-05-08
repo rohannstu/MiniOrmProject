@@ -76,7 +76,7 @@ class Program
 
         // Read [Table] from the class
         var tableAttr = (TableAttribute?)Attribute.GetCustomAttribute(type, typeof(TableAttribute));
-        Console.WriteLine($"Table name: {tableAttr?.Name}");
+        Console.WriteLine($"Table name: {tableAttr?.Name}"); 
 
         // Read attributes from each property
         foreach (var prop in type.GetProperties())
