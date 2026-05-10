@@ -7,6 +7,7 @@ var connectionString = Environment.GetEnvironmentVariable("MINIORM_CONN")
 using var context = new AppDbContext(connectionString);
 
 
+
 // ── INSERT ────────────────────────────────────────────────────────────
 var laptop = new Product
 {

@@ -6,13 +6,12 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v10.0": {
-      "MiniOrm/1.0.0": {
+      "MiniOrm.Migrations/1.0.0": {
         "dependencies": {
-          "MiniOrm.Migrations": "1.0.0",
           "Npgsql": "10.0.2"
         },
         "runtime": {
-          "MiniOrm.dll": {}
+          "MiniOrm.Migrations.dll": {}
         }
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.0": {
@@ -44,22 +43,11 @@
             "fileVersion": "10.0.2.0"
           }
         }
-      },
-      "MiniOrm.Migrations/1.0.0": {
-        "dependencies": {
-          "Npgsql": "10.0.2"
-        },
-        "runtime": {
-          "MiniOrm.Migrations.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
       }
     }
   },
   "libraries": {
-    "MiniOrm/1.0.0": {
+    "MiniOrm.Migrations/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -84,11 +72,6 @@
       "sha512": "sha512-q5RfBI+wywJSFUNDE1L4ZbHEHCFTblo8Uf6A6oe4feOUFYiUQXyAf9GBh5qEZpvJaHiEbpBPkQumjEhXCJxdrg==",
       "path": "npgsql/10.0.2",
       "hashPath": "npgsql.10.0.2.nupkg.sha512"
-    },
-    "MiniOrm.Migrations/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
     }
   }
 }

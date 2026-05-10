@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\MiniOrm.Migrations.csproj": {}
+    "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\MiniOrm.Migrations.csproj": {}
   },
   "projects": {
-    "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\MiniOrm.Migrations.csproj": {
+    "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\MiniOrm.Migrations.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\MiniOrm.Migrations.csproj",
+        "projectUniqueName": "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\MiniOrm.Migrations.csproj",
         "projectName": "MiniOrm.Migrations",
-        "projectPath": "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\MiniOrm.Migrations.csproj",
+        "projectPath": "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\MiniOrm.Migrations.csproj",
         "packagesPath": "C:\\Users\\rohan\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\obj\\",
+        "outputPath": "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
