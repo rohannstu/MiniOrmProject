@@ -6,7 +6,7 @@ var connectionString = Environment.GetEnvironmentVariable("MINIORM_CONN")
 
 using var context = new AppDbContext(connectionString);
 
-// ── Test 1: Insert with all values populated ─────────────────────────
+// ── Insert two products ───────────────────────────────────────────────
 var laptop = new Product
 {
     Name = "Laptop",
@@ -15,42 +15,35 @@ var laptop = new Product
     InStock = true,
     CreatedAt = DateTime.UtcNow
 };
-
 context.Products.Insert(laptop);
 Console.WriteLine($"Inserted Product Id={laptop.Id}");
-Console.WriteLine($"  Name:     {laptop.Name}");
-Console.WriteLine($"  Price:    {laptop.Price}");
-Console.WriteLine($"  Discount: {laptop.Discount}");
-Console.WriteLine($"  InStock:  {laptop.InStock}");
 
-// ── Test 2: Insert with nullable fields as null ──────────────────────
 var mouse = new Product
 {
     Name = "Mouse",
     Price = 29.99m,
-    Discount = null, // ← should store NULL in DB
+    Discount = null,
     InStock = true,
-    CreatedAt = null // ← should store NULL in DB
+    CreatedAt = null
 };
-
 context.Products.Insert(mouse);
-Console.WriteLine($"\nInserted Product Id={mouse.Id}");
-Console.WriteLine($"  Name:      {mouse.Name}");
-Console.WriteLine($"  Discount:  {(mouse.Discount == null ? "NULL" : mouse.Discount)}");
-Console.WriteLine($"  CreatedAt: {(mouse.CreatedAt == null ? "NULL" : mouse.CreatedAt)}");
+Console.WriteLine($"Inserted Product Id={mouse.Id}");
 
-// ── Test 3: Insert an Order ──────────────────────────────────────────
-var order = new Order
-{
-    ProductId = laptop.Id,
-    Quantity = 2,
-    TotalPrice = 1999.98m,
-    Note = null, // ← nullable string, should store NULL
-    OrderedAt = DateTime.UtcNow
-};
+// ── FindById: existing record ─────────────────────────────────────────
+var found = context.Products.FindById(laptop.Id);
+Console.WriteLine($"\nFindById({laptop.Id}):");
+Console.WriteLine($"  Name:     {found?.Name}");
+Console.WriteLine($"  Price:    {found?.Price}");
+Console.WriteLine($"  Discount: {found?.Discount}");
+Console.WriteLine($"  InStock:  {found?.InStock}");
 
-context.Orders.Insert(order);
-Console.WriteLine($"\nInserted Order Id={order.Id}");
-Console.WriteLine($"  ProductId:  {order.ProductId}");
-Console.WriteLine($"  Quantity:   {order.Quantity}");
-Console.WriteLine($"  Note:       {(order.Note == null ? "NULL" : order.Note)}");
+// ── FindById: nullable fields should come back as null ────────────────
+var foundMouse = context.Products.FindById(mouse.Id);
+Console.WriteLine($"\nFindById({mouse.Id}):");
+Console.WriteLine($"  Name:      {foundMouse?.Name}");
+Console.WriteLine($"  Discount:  {(foundMouse?.Discount == null ? "NULL" : foundMouse.Discount)}");
+Console.WriteLine($"  CreatedAt: {(foundMouse?.CreatedAt == null ? "NULL" : foundMouse.CreatedAt)}");
+
+// ── FindById: non-existent id should return null ──────────────────────
+var missing = context.Products.FindById(99999);
+Console.WriteLine($"\nFindById(99999): {(missing == null ? "NULL (correct)" : "ERROR — should be null")}");

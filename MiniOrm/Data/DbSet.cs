@@ -3,11 +3,6 @@ using Npgsql;
 
 namespace MiniOrm.Data;
 
-/// <summary>
-/// Generic CRUD operations for entity type T.
-/// All SQL is built dynamically from EntityMetadata — no hardcoded table or column names.
-/// All values are passed as NpgsqlParameters — no string concatenation, no SQL injection risk.
-/// </summary>
 public class DbSet<T> where T : class, new()
 {
     protected readonly NpgsqlConnection _connection;
@@ -19,64 +14,127 @@ public class DbSet<T> where T : class, new()
         _metadata = EntityMetadata.BuildFrom<T>();
     }
 
-    // Insert 
-
-    /// <summary>
-    /// Inserts a new entity row into the database.
-    /// Excludes the primary key column (PostgreSQL generates it via SERIAL).
-    /// Uses RETURNING id to get the generated key and sets it back on the entity.
-    ///
-    /// Generated SQL example:
-    ///   INSERT INTO products (name, price, discount, in_stock, created_at)
-    ///   VALUES (@name, @price, @discount, @in_stock, @created_at)
-    ///   RETURNING id
-    /// </summary>
+    // ══════════════════════════════════════════════════════════════
+    // INSERT
+    // ══════════════════════════════════════════════════════════════
     public void Insert(T entity)
     {
-        // ── Step 1: Build column list and parameter list 
-        // We use _metadata.Columns which already excludes the primary key
         var columnNames = _metadata.Columns.Select(c => c.ColumnName);
         var paramNames = _metadata.Columns.Select(c => $"@{c.ColumnName}");
 
-        // ── Step 2: Assemble the SQL string 
         var sql = new StringBuilder();
         sql.Append($"INSERT INTO {_metadata.TableName} ");
         sql.Append($"({string.Join(", ", columnNames)}) ");
         sql.Append($"VALUES ({string.Join(", ", paramNames)}) ");
         sql.Append($"RETURNING {_metadata.PrimaryKey.ColumnName}");
 
-        // ── Step 3: Create command and bind parameters 
         using var command = new NpgsqlCommand(sql.ToString(), _connection);
 
         foreach (var col in _metadata.Columns)
         {
-            // Read the current value of this property from the entity instance
             var value = col.Property.GetValue(entity);
-
-            // CRITICAL: ADO.NET requires DBNull.Value for SQL NULL
-            // Passing C# null throws a runtime exception
             command.Parameters.AddWithValue($"@{col.ColumnName}", value ?? DBNull.Value);
         }
 
-        // ── Step 4: Execute and capture the returned id 
-        // ExecuteScalar returns the first column of the first row
-        // RETURNING id means that's our generated primary key
         var returnedId = command.ExecuteScalar();
 
-        // ── Step 5: Write the generated id back to the entity 
-        // This is why after Insert(product), product.Id is populated
         if (returnedId != null && returnedId != DBNull.Value)
-        {
             _metadata.PrimaryKey.Property.SetValue(entity, Convert.ToInt32(returnedId));
-        }
     }
 
-    public T? FindById(int id) => throw new NotImplementedException("not implemented yet");
+    // ══════════════════════════════════════════════════════════════
+    // FIND BY ID
+    // ══════════════════════════════════════════════════════════════
 
+    /// <summary>
+    /// Fetches a single row by primary key.
+    /// Returns null if no row is found.
+    ///
+    /// Generated SQL example:
+    ///   SELECT id, name, price, discount, in_stock, created_at
+    ///   FROM products
+    ///   WHERE id = @id
+    /// </summary>
+    public T? FindById(int id)
+    {
+        // ── Step 1: Build SELECT column list from ALL properties (PK + columns) ──
+        var selectColumns = string.Join(", ", _metadata.AllProperties.Select(p => p.ColumnName));
 
+        // ── Step 2: Build the SQL ─────────────────────────────────────────────
+        var sql = $"SELECT {selectColumns} " +
+                  $"FROM {_metadata.TableName} " +
+                  $"WHERE {_metadata.PrimaryKey.ColumnName} = @id";
+
+        using var command = new NpgsqlCommand(sql, _connection);
+
+        // ── Step 3: Bind the id parameter ────────────────────────────────────
+        command.Parameters.AddWithValue("@id", id);
+
+        // ── Step 4: Execute and read ──────────────────────────────────────────
+        using var reader = command.ExecuteReader();
+
+        // reader.Read() advances to the first row
+        // Returns false if no rows matched — we return null
+        if (!reader.Read())
+            return null;
+
+        // ── Step 5: Hydrate one entity from the current reader row ────────────
+        return Hydrate(reader);
+    }
+
+   
     public List<T> GetAll() => throw new NotImplementedException("not implemented yet");
 
+   
     public void Update(T entity) => throw new NotImplementedException("not implemented yet");
 
     public void Delete(int id) => throw new NotImplementedException("not implemented yet");
+
+    // ══════════════════════════════════════════════════════════════
+    // HYDRATE — private helper shared by FindById and GetAll
+    // ══════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Converts the current row of an NpgsqlDataReader into a populated T instance.
+    ///
+    /// Process:
+    ///   1. new T()                          — blank entity
+    ///   2. reader[columnName]               — raw object from DB
+    ///   3. DBNull check                     — DB NULL → C# null
+    ///   4. Convert.ChangeType               — object → correct CLR type
+    ///   5. prop.SetValue(entity, value)     — write to property
+    /// </summary>
+    private T Hydrate(NpgsqlDataReader reader)
+    {
+        // Create a blank instance — requires the new() constraint on T
+        var entity = new T();
+
+        // Map every tracked property (PK + all columns)
+        foreach (var prop in _metadata.AllProperties)
+        {
+            // Read raw value from the reader by column name
+            var rawValue = reader[prop.ColumnName];
+
+            // DBNull.Value is ADO.NET's representation of SQL NULL
+            // We must convert it to C# null before setting on the property
+            if (rawValue == DBNull.Value)
+            {
+                // Only set null if the property can accept it
+                // Nullable value types (int?, decimal?) and reference types (string?) can
+                // Non-nullable value types (int, decimal) cannot — leave them at default
+                if (prop.IsNullable)
+                    prop.Property.SetValue(entity, null);
+
+                continue;
+            }
+
+            // Convert the raw database value to the exact CLR type the property expects
+            // reader returns boxed objects — Convert.ChangeType unboxes to the right type
+            // e.g. rawValue is boxed decimal 999.99 → Convert to decimal → set on Price
+            var converted = Convert.ChangeType(rawValue, prop.ClrType);
+            prop.Property.SetValue(entity, converted);
+        }
+
+        return entity;
+    }
 }
