@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="920" viewBox="0 0 680 920" style="background:#ffffff;font-family:Arial,sans-serif">
+
+  <!-- ── SECTION BACKGROUNDS ── -->
+  <rect x="55" y="40"  width="595" height="120" rx="6" fill="#f0fdf4" opacity="0.6"/>
+  <rect x="55" y="170" width="595" height="170" rx="6" fill="#f5f3ff" opacity="0.6"/>
+  <rect x="55" y="355" width="595" height="210" rx="6" fill="#fff7ed" opacity="0.5"/>
+  <rect x="55" y="575" width="595" height="185" rx="6" fill="#f9fafb" opacity="0.6"/>
+  <rect x="55" y="770" width="595" height="110" rx="6" fill="#f0fdf4" opacity="0.4"/>
+
+  <!-- ── LAYER LABELS ── -->
+  <text x="30" y="100"  font-size="11" fill="#9ca3af" text-anchor="middle" transform="rotate(-90,30,100)">Entities</text>
+  <text x="30" y="255"  font-size="11" fill="#9ca3af" text-anchor="middle" transform="rotate(-90,30,255)">Attributes</text>
+  <text x="30" y="460"  font-size="11" fill="#9ca3af" text-anchor="middle" transform="rotate(-90,30,460)">ORM Core</text>
+  <text x="30" y="660"  font-size="11" fill="#9ca3af" text-anchor="middle" transform="rotate(-90,30,660)">Migrations</text>
+  <text x="30" y="825"  font-size="11" fill="#9ca3af" text-anchor="middle" transform="rotate(-90,30,825)">Database</text>
+
+  <!-- ── DIVIDERS ── -->
+  <line x1="55" y1="162" x2="645" y2="162" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="55" y1="342" x2="645" y2="342" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="55" y1="565" x2="645" y2="565" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="55" y1="762" x2="645" y2="762" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- ══ ROW 1 — ENTITIES ══ -->
+  <!-- Product -->
+  <rect x="120" y="58" width="160" height="72" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="1"/>
+  <text x="200" y="88"  font-size="13" font-weight="600" fill="#065f46" text-anchor="middle">Product.cs</text>
+  <text x="200" y="108" font-size="10" fill="#047857" text-anchor="middle">[Table] [PrimaryKey] [Column]</text>
+
+  <!-- Order -->
+  <rect x="400" y="58" width="160" height="72" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="1"/>
+  <text x="480" y="88"  font-size="13" font-weight="600" fill="#065f46" text-anchor="middle">Order.cs</text>
+  <text x="480" y="108" font-size="10" fill="#047857" text-anchor="middle">[Table] [PrimaryKey] [Column]</text>
+
+  <!-- ══ ARROWS: Entities → Attributes ══ -->
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <line x1="175" y1="130" x2="148" y2="185" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="210" y1="130" x2="320" y2="185" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="455" y1="130" x2="395" y2="185" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="500" y1="130" x2="532" y2="185" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- ══ ROW 2 — ATTRIBUTES ══ -->
+  <!-- Table -->
+  <rect x="78"  y="185" width="130" height="56" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1"/>
+  <text x="143" y="209" font-size="13" font-weight="600" fill="#4c1d95" text-anchor="middle">[Table]</text>
+  <text x="143" y="229" font-size="10" fill="#6d28d9" text-anchor="middle">Table name</text>
+
+  <!-- PrimaryKey -->
+  <rect x="270" y="185" width="140" height="56" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1"/>
+  <text x="340" y="209" font-size="13" font-weight="600" fill="#4c1d95" text-anchor="middle">[PrimaryKey]</text>
+  <text x="340" y="229" font-size="10" fill="#6d28d9" text-anchor="middle">SERIAL PRIMARY KEY</text>
+
+  <!-- Column -->
+  <rect x="472" y="185" width="130" height="56" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1"/>
+  <text x="537" y="209" font-size="13" font-weight="600" fill="#4c1d95" text-anchor="middle">[Column]</text>
+  <text x="537" y="229" font-size="10" fill="#6d28d9" text-anchor="middle">Column name</text>
+
+  <!-- ══ ARROWS: Attributes → EntityMetadata ══ -->
+  <line x1="155" y1="241" x2="295" y2="373" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="340" y1="241" x2="340" y2="373" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="520" y1="241" x2="392" y2="373" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- ══ ROW 3 — ORM CORE ══ -->
+  <!-- EntityMetadata -->
+  <rect x="238" y="373" width="204" height="72" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+  <text x="340" y="401" font-size="13" font-weight="600" fill="#7f1d1d" text-anchor="middle">EntityMetadata</text>
+  <text x="340" y="421" font-size="10" fill="#b91c1c" text-anchor="middle">Reflection cache (once per type)</text>
+
+  <!-- TypeMapper -->
+  <rect x="78"  y="388" width="130" height="56" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1"/>
+  <text x="143" y="410" font-size="13" font-weight="600" fill="#78350f" text-anchor="middle">TypeMapper</text>
+  <text x="143" y="430" font-size="10" fill="#92400e" text-anchor="middle">CLR → Postgres type</text>
+
+  <!-- EntityMetadata → TypeMapper -->
+  <line x1="238" y1="409" x2="208" y2="409" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- DbContext -->
+  <rect x="460" y="373" width="160" height="72" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+  <text x="540" y="401" font-size="13" font-weight="600" fill="#1e3a8a" text-anchor="middle">DbContext</text>
+  <text x="540" y="421" font-size="10" fill="#1d4ed8" text-anchor="middle">Connection + DbSet init</text>
+
+  <!-- EntityMetadata → DbContext -->
+  <line x1="442" y1="409" x2="460" y2="409" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- DbSet -->
+  <rect x="460" y="478" width="160" height="72" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+  <text x="540" y="500" font-size="13" font-weight="600" fill="#1e3a8a" text-anchor="middle">DbSet&lt;T&gt;</text>
+  <text x="540" y="518" font-size="10" fill="#1d4ed8" text-anchor="middle">Insert · FindById · GetAll</text>
+  <text x="540" y="538" font-size="10" fill="#1d4ed8" text-anchor="middle">Update · Delete</text>
+
+  <!-- DbContext → DbSet -->
+  <line x1="540" y1="445" x2="540" y2="478" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- ══ ROW 4 — MIGRATIONS ══ -->
+  <!-- MigrationRunner -->
+  <rect x="200" y="593" width="280" height="56" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1"/>
+  <text x="340" y="617" font-size="13" font-weight="600" fill="#111827" text-anchor="middle">MigrationRunner</text>
+  <text x="340" y="637" font-size="10" fill="#374151" text-anchor="middle">add · apply · list · rollback</text>
+
+  <!-- TypeMapper → MigrationRunner -->
+  <path d="M143 444 L143 621 L200 621" fill="none" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- SQL Files -->
+  <rect x="78"  y="678" width="200" height="56" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1"/>
+  <text x="178" y="700" font-size="13" font-weight="600" fill="#111827" text-anchor="middle">Migration .sql files</text>
+  <text x="178" y="720" font-size="10" fill="#374151" text-anchor="middle">-- up / -- down sections</text>
+
+  <!-- __migrations -->
+  <rect x="402" y="678" width="200" height="56" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1"/>
+  <text x="502" y="700" font-size="13" font-weight="600" fill="#111827" text-anchor="middle">__migrations table</text>
+  <text x="502" y="720" font-size="10" fill="#374151" text-anchor="middle">Applied history tracking</text>
+
+  <!-- MigrationRunner → SQL + tracking -->
+  <line x1="290" y1="649" x2="228" y2="678" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="390" y1="649" x2="452" y2="678" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- ══ ROW 5 — POSTGRESQL ══ -->
+  <rect x="160" y="788" width="360" height="72" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1"/>
+  <text x="340" y="816" font-size="13" font-weight="600" fill="#14532d" text-anchor="middle">PostgreSQL (Docker)</text>
+  <text x="340" y="836" font-size="10" fill="#166534" text-anchor="middle">NpgsqlConnection · NpgsqlCommand · NpgsqlDataReader</text>
+
+  <!-- DbSet → PostgreSQL -->
+  <line x1="540" y1="550" x2="462" y2="788" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+  <!-- SQL files → PostgreSQL -->
+  <line x1="210" y1="734" x2="268" y2="788" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+  <!-- __migrations → PostgreSQL -->
+  <line x1="468" y1="734" x2="418" y2="788" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- ══ LEGEND ══ -->
+  <rect x="60" y="882" width="560" height="28" rx="6" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+  <rect x="72"  y="892" width="10" height="10" rx="2" fill="#d1fae5" stroke="#059669" stroke-width="1"/>
+  <text x="88"  y="901" font-size="10" fill="#374151" dominant-baseline="central">Entities</text>
+  <rect x="140" y="892" width="10" height="10" rx="2" fill="#ede9fe" stroke="#7c3aed" stroke-width="1"/>
+  <text x="156" y="901" font-size="10" fill="#374151" dominant-baseline="central">Attributes</text>
+  <rect x="222" y="892" width="10" height="10" rx="2" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+  <text x="238" y="901" font-size="10" fill="#374151" dominant-baseline="central">Metadata</text>
+  <rect x="298" y="892" width="10" height="10" rx="2" fill="#fef3c7" stroke="#d97706" stroke-width="1"/>
+  <text x="314" y="901" font-size="10" fill="#374151" dominant-baseline="central">Type mapping</text>
+  <rect x="400" y="892" width="10" height="10" rx="2" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+  <text x="416" y="901" font-size="10" fill="#374151" dominant-baseline="central">ORM engine</text>
+  <rect x="490" y="892" width="10" height="10" rx="2" fill="#dcfce7" stroke="#16a34a" stroke-width="1"/>
+  <text x="506" y="901" font-size="10" fill="#374151" dominant-baseline="central">Database</text>
+
+</svg>
