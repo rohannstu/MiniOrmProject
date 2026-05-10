@@ -6,7 +6,8 @@ var connectionString = Environment.GetEnvironmentVariable("MINIORM_CONN")
 
 using var context = new AppDbContext(connectionString);
 
-// ── Insert two products ───────────────────────────────────────────────
+
+// ── INSERT ────────────────────────────────────────────────────────────
 var laptop = new Product
 {
     Name = "Laptop",
@@ -16,7 +17,7 @@ var laptop = new Product
     CreatedAt = DateTime.UtcNow
 };
 context.Products.Insert(laptop);
-Console.WriteLine($"Inserted Product Id={laptop.Id}");
+Console.WriteLine($"[INSERT] Product Id={laptop.Id}  Name={laptop.Name}  Price={laptop.Price}");
 
 var mouse = new Product
 {
@@ -27,23 +28,60 @@ var mouse = new Product
     CreatedAt = null
 };
 context.Products.Insert(mouse);
-Console.WriteLine($"Inserted Product Id={mouse.Id}");
+Console.WriteLine($"[INSERT] Product Id={mouse.Id}  Name={mouse.Name}  Discount=NULL  CreatedAt=NULL");
 
-// ── FindById: existing record ─────────────────────────────────────────
+var order = new Order
+{
+    ProductId = laptop.Id,
+    Quantity = 2,
+    TotalPrice = 1999.98m,
+    Note = null,
+    OrderedAt = DateTime.UtcNow
+};
+context.Orders.Insert(order);
+Console.WriteLine($"[INSERT] Order Id={order.Id}  ProductId={order.ProductId}  Note=NULL");
+
+// ── FIND BY ID ────────────────────────────────────────────────────────
+Console.WriteLine();
 var found = context.Products.FindById(laptop.Id);
-Console.WriteLine($"\nFindById({laptop.Id}):");
-Console.WriteLine($"  Name:     {found?.Name}");
-Console.WriteLine($"  Price:    {found?.Price}");
-Console.WriteLine($"  Discount: {found?.Discount}");
-Console.WriteLine($"  InStock:  {found?.InStock}");
+Console.WriteLine($"[FIND]   Id={found?.Id}  Name={found?.Name}  " +
+                  $"Discount={found?.Discount}  InStock={found?.InStock}");
 
-// ── FindById: nullable fields should come back as null ────────────────
 var foundMouse = context.Products.FindById(mouse.Id);
-Console.WriteLine($"\nFindById({mouse.Id}):");
-Console.WriteLine($"  Name:      {foundMouse?.Name}");
-Console.WriteLine($"  Discount:  {(foundMouse?.Discount == null ? "NULL" : foundMouse.Discount)}");
-Console.WriteLine($"  CreatedAt: {(foundMouse?.CreatedAt == null ? "NULL" : foundMouse.CreatedAt)}");
+Console.WriteLine($"[FIND]   Id={foundMouse?.Id}  Name={foundMouse?.Name}  " +
+                  $"Discount={(foundMouse?.Discount == null ? "NULL" : foundMouse.Discount)}  " +
+                  $"CreatedAt={(foundMouse?.CreatedAt == null ? "NULL" : foundMouse.CreatedAt)}");
 
-// ── FindById: non-existent id should return null ──────────────────────
 var missing = context.Products.FindById(99999);
-Console.WriteLine($"\nFindById(99999): {(missing == null ? "NULL (correct)" : "ERROR — should be null")}");
+Console.WriteLine($"[FIND]   Id=99999  Result={(missing == null ? "NULL (correct)" : "ERROR")}");
+
+// ── GET ALL ───────────────────────────────────────────────────────────
+Console.WriteLine();
+var allProducts = context.Products.GetAll();
+Console.WriteLine($"[GETALL] Products in table: {allProducts.Count}");
+foreach (var p in allProducts)
+    Console.WriteLine($"         → Id={p.Id}  Name={p.Name}  Price={p.Price}");
+
+// ── UPDATE ────────────────────────────────────────────────────────────
+Console.WriteLine();
+laptop.Price = 899.99m;
+laptop.Discount = null; // clear the discount → should become NULL in DB
+context.Products.Update(laptop);
+Console.WriteLine($"[UPDATE] Id={laptop.Id}  NewPrice={laptop.Price}  Discount=NULL");
+
+var afterUpdate = context.Products.FindById(laptop.Id);
+Console.WriteLine($"[VERIFY] Id={afterUpdate?.Id}  Price={afterUpdate?.Price}  " +
+                  $"Discount={(afterUpdate?.Discount == null ? "NULL" : afterUpdate.Discount)}");
+
+// ── DELETE ────────────────────────────────────────────────────────────
+Console.WriteLine();
+context.Products.Delete(mouse.Id);
+Console.WriteLine($"[DELETE] Product Id={mouse.Id} deleted");
+
+var afterDelete = context.Products.FindById(mouse.Id);
+Console.WriteLine($"[VERIFY] FindById({mouse.Id}) after delete: " +
+                  $"{(afterDelete == null ? "NULL (correct)" : "ERROR — still exists")}");
+
+var remainingProducts = context.Products.GetAll();
+Console.WriteLine($"[GETALL] Products remaining: {remainingProducts.Count}");
+

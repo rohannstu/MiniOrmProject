@@ -42,95 +42,145 @@ public class DbSet<T> where T : class, new()
             _metadata.PrimaryKey.Property.SetValue(entity, Convert.ToInt32(returnedId));
     }
 
-    // ══════════════════════════════════════════════════════════════
-    // FIND BY ID
-    // ══════════════════════════════════════════════════════════════
 
-    /// <summary>
-    /// Fetches a single row by primary key.
-    /// Returns null if no row is found.
-    ///
-    /// Generated SQL example:
-    ///   SELECT id, name, price, discount, in_stock, created_at
-    ///   FROM products
-    ///   WHERE id = @id
-    /// </summary>
     public T? FindById(int id)
     {
-        // ── Step 1: Build SELECT column list from ALL properties (PK + columns) ──
         var selectColumns = string.Join(", ", _metadata.AllProperties.Select(p => p.ColumnName));
 
-        // ── Step 2: Build the SQL ─────────────────────────────────────────────
         var sql = $"SELECT {selectColumns} " +
                   $"FROM {_metadata.TableName} " +
                   $"WHERE {_metadata.PrimaryKey.ColumnName} = @id";
 
         using var command = new NpgsqlCommand(sql, _connection);
-
-        // ── Step 3: Bind the id parameter ────────────────────────────────────
         command.Parameters.AddWithValue("@id", id);
 
-        // ── Step 4: Execute and read ──────────────────────────────────────────
         using var reader = command.ExecuteReader();
 
-        // reader.Read() advances to the first row
-        // Returns false if no rows matched — we return null
         if (!reader.Read())
             return null;
 
-        // ── Step 5: Hydrate one entity from the current reader row ────────────
         return Hydrate(reader);
     }
 
-   
-    public List<T> GetAll() => throw new NotImplementedException("not implemented yet");
-
-   
-    public void Update(T entity) => throw new NotImplementedException("not implemented yet");
-
-    public void Delete(int id) => throw new NotImplementedException("not implemented yet");
-
-    // ══════════════════════════════════════════════════════════════
-    // HYDRATE — private helper shared by FindById and GetAll
-    // ══════════════════════════════════════════════════════════════
 
     /// <summary>
-    /// Converts the current row of an NpgsqlDataReader into a populated T instance.
+    /// Fetches every row from the table.
+    /// Returns an empty list if no rows exist — never returns null.
     ///
-    /// Process:
-    ///   1. new T()                          — blank entity
-    ///   2. reader[columnName]               — raw object from DB
-    ///   3. DBNull check                     — DB NULL → C# null
-    ///   4. Convert.ChangeType               — object → correct CLR type
-    ///   5. prop.SetValue(entity, value)     — write to property
+    /// Generated SQL example:
+    ///   SELECT id, name, price, discount, in_stock, created_at
+    ///   FROM products
     /// </summary>
+    public List<T> GetAll()
+    {
+        // ── Step 1: Build SELECT for all mapped columns ───────────────────
+        var selectColumns = string.Join(", ", _metadata.AllProperties.Select(p => p.ColumnName));
+        var sql = $"SELECT {selectColumns} FROM {_metadata.TableName}";
+
+        using var command = new NpgsqlCommand(sql, _connection);
+        using var reader = command.ExecuteReader();
+
+        // ── Step 2: Hydrate every row into a T and collect ────────────────
+        var results = new List<T>();
+
+        // reader.Read() returns true while rows remain
+        // Each call advances the cursor to the next row
+        while (reader.Read())
+            results.Add(Hydrate(reader));
+
+        return results;
+    }
+
+
+    /// <summary>
+    /// Updates every non-PK column for the row matching the entity's primary key.
+    ///
+    /// Generated SQL example:
+    ///   UPDATE products
+    ///   SET name = @name, price = @price, discount = @discount,
+    ///       in_stock = @in_stock, created_at = @created_at
+    ///   WHERE id = @id
+    /// </summary>
+    public void Update(T entity)
+    {
+        // ── Step 1: Build SET clause — all columns except primary key ─────
+        // Each entry looks like:  name = @name
+        var setClauses = _metadata.Columns.Select(c => $"{c.ColumnName} = @{c.ColumnName}");
+
+        var sql = new StringBuilder();
+        sql.Append($"UPDATE {_metadata.TableName} ");
+        sql.Append($"SET {string.Join(", ", setClauses)} ");
+        sql.Append($"WHERE {_metadata.PrimaryKey.ColumnName} = @{_metadata.PrimaryKey.ColumnName}");
+
+        using var command = new NpgsqlCommand(sql.ToString(), _connection);
+
+        // ── Step 2: Bind all column parameters ───────────────────────────
+        foreach (var col in _metadata.Columns)
+        {
+            var value = col.Property.GetValue(entity);
+            command.Parameters.AddWithValue($"@{col.ColumnName}", value ?? DBNull.Value);
+        }
+
+        // ── Step 3: Bind the WHERE id parameter ──────────────────────────
+        // Read the primary key value from the entity instance
+        var pkValue = _metadata.PrimaryKey.Property.GetValue(entity)
+                      ?? throw new InvalidOperationException(
+                          $"Cannot update entity of type '{typeof(T).Name}': primary key value is null.");
+
+        command.Parameters.AddWithValue(
+            $"@{_metadata.PrimaryKey.ColumnName}",
+            pkValue);
+
+        // ── Step 4: Execute ───────────────────────────────────────────────
+        // ExecuteNonQuery returns the number of rows affected
+        // We don't strictly need it but it's useful for verification
+        var rowsAffected = command.ExecuteNonQuery();
+
+        if (rowsAffected == 0)
+            throw new InvalidOperationException(
+                $"Update affected 0 rows. No {typeof(T).Name} found with " +
+                $"{_metadata.PrimaryKey.ColumnName} = {pkValue}.");
+    }
+
+
+    /// <summary>
+    /// Deletes the row with the given primary key value.
+    ///
+    /// Generated SQL example:
+    ///   DELETE FROM products WHERE id = @id
+    /// </summary>
+    public void Delete(int id)
+    {
+        var sql = $"DELETE FROM {_metadata.TableName} " +
+                  $"WHERE {_metadata.PrimaryKey.ColumnName} = @id";
+
+        using var command = new NpgsqlCommand(sql, _connection);
+        command.Parameters.AddWithValue("@id", id);
+
+        var rowsAffected = command.ExecuteNonQuery();
+
+        if (rowsAffected == 0)
+            throw new InvalidOperationException(
+                $"Delete affected 0 rows. No {typeof(T).Name} found with " +
+                $"{_metadata.PrimaryKey.ColumnName} = {id}.");
+    }
+
+
     private T Hydrate(NpgsqlDataReader reader)
     {
-        // Create a blank instance — requires the new() constraint on T
         var entity = new T();
 
-        // Map every tracked property (PK + all columns)
         foreach (var prop in _metadata.AllProperties)
         {
-            // Read raw value from the reader by column name
             var rawValue = reader[prop.ColumnName];
 
-            // DBNull.Value is ADO.NET's representation of SQL NULL
-            // We must convert it to C# null before setting on the property
             if (rawValue == DBNull.Value)
             {
-                // Only set null if the property can accept it
-                // Nullable value types (int?, decimal?) and reference types (string?) can
-                // Non-nullable value types (int, decimal) cannot — leave them at default
                 if (prop.IsNullable)
                     prop.Property.SetValue(entity, null);
-
                 continue;
             }
 
-            // Convert the raw database value to the exact CLR type the property expects
-            // reader returns boxed objects — Convert.ChangeType unboxes to the right type
-            // e.g. rawValue is boxed decimal 999.99 → Convert to decimal → set on Price
             var converted = Convert.ChangeType(rawValue, prop.ClrType);
             prop.Property.SetValue(entity, converted);
         }
