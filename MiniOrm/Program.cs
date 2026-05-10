@@ -1,49 +1,17 @@
-﻿using MiniOrm.Attributes;
-using MiniOrm.Data;
+﻿using MiniOrm.Data;
 
-namespace MiniOrmApp;
+// Read connection string from environment
+var connectionString = Environment.GetEnvironmentVariable("MINIORM_CONN")
+    ?? throw new InvalidOperationException("MINIORM_CONN environment variable is not set.");
 
-[Table("products")]
-class Product
-{
-    [PrimaryKey("id")]
-    public int Id { get; set; }
+// Create the context — this opens the connection and initializes DbSets
+using var context = new AppDbContext(connectionString);
 
-    [Column("name")]
-    public string Name { get; set; } = "";
+Console.WriteLine("DbContext created successfully.");
+Console.WriteLine($"Connection state: {context.GetConnection().State}");
 
-    [Column("price")]
-    public decimal Price { get; set; }
+// Verify DbSets were initialized by reflection
+Console.WriteLine($"Products DbSet initialized: {context.Products != null}");
+Console.WriteLine($"Orders DbSet initialized:   {context.Orders != null}");
 
-    [Column("discount")]
-    public decimal? Discount { get; set; }
-
-    [Column("in_stock")]
-    public bool InStock { get; set; }
-
-    [Column("created_at")]
-    public DateTime? CreatedAt { get; set; }
-}
-
-class Program
-{
-    static void Main()
-    {
-        var meta = EntityMetadata.BuildFrom<Product>();
-
-        Console.WriteLine($"CREATE TABLE {meta.TableName} (");
-
-        // Primary key first
-        var pkType = TypeMapper.GetPostgresType(meta.PrimaryKey, isPrimaryKey: true);
-        Console.WriteLine($"    {meta.PrimaryKey.ColumnName}    {pkType},");
-
-        // Regular columns
-        foreach (var col in meta.Columns)
-        {
-            var pgType = TypeMapper.GetPostgresType(col, isPrimaryKey: false);
-            Console.WriteLine($"    {col.ColumnName}    {pgType},");
-        }
-
-        Console.WriteLine(");");
-    }
-}
+Console.WriteLine("DbContext disposed cleanly.");
