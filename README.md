@@ -51,7 +51,7 @@ MiniOrmProject/
 
 ## Prerequisites
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download)
+- [.NET 8 SDK or higher](https://dotnet.microsoft.com/download)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) (Windows)
 - [DBeaver](https://dbeaver.io/) (optional, for visual inspection)
 
@@ -346,7 +346,7 @@ if (rawValue == DBNull.Value)
 
 | Component | Technology |
 |---|---|
-| Language | C# / .NET 8 |
+| Language | C# / .NET 8 or higher |
 | Database driver | Npgsql (only NuGet package) |
 | Database | PostgreSQL 16 (Docker) |
 | Forbidden | Entity Framework, Dapper, any ORM library |
