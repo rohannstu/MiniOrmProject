@@ -210,11 +210,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\MiniOrm.csproj",
+      "projectUniqueName": "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\MiniOrm.csproj",
       "projectName": "MiniOrm",
-      "projectPath": "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\MiniOrm.csproj",
+      "projectPath": "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\MiniOrm.csproj",
       "packagesPath": "C:\\Users\\rohan\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\obj\\",
+      "outputPath": "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -235,8 +235,8 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\MiniOrm.Migrations.csproj": {
-              "projectPath": "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\MiniOrm.Migrations.csproj"
+            "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\MiniOrm.Migrations.csproj": {
+              "projectPath": "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm.Migrations\\MiniOrm.Migrations.csproj"
             }
           }
         }
