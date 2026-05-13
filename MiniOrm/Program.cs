@@ -7,7 +7,7 @@ using MiniOrm.Models;
 // ══════════════════════════════════════════════════════════════════════
 
 Console.WriteLine("╔══════════════════════════════════════════════╗");
-Console.WriteLine("║         MiniOrm — Assignment Demo            ║");
+Console.WriteLine("║                  MiniOrm                     ║");
 Console.WriteLine("╚══════════════════════════════════════════════╝");
 Console.WriteLine();
 
@@ -62,14 +62,13 @@ Console.WriteLine($"Inserted Product  Id={mouse.Id}  Name={mouse.Name}  " +
 var keyboard = new Product
 {
     Name = "Keyboard",
-    Price = 49.99m,
+    Price = 89.99m,
     Discount = null,
-    InStock = false,
-    CreatedAt = DateTime.UtcNow
+    InStock = true
 };
-context.Products.Insert(keyboard);
-Console.WriteLine($"Inserted Product  Id={keyboard.Id}  Name={keyboard.Name}  " +
-                  $"InStock={keyboard.InStock}");
+
+int id = context.Products.Insert(keyboard);
+Console.WriteLine($"Inserted Product Id={id}  Discount=NULL ✓");
 
 // Order linked to laptop
 var order = new Order
@@ -174,7 +173,3 @@ Console.WriteLine($"Orders remaining: {finalOrders.Count}");
 foreach (var o in finalOrders)
     Console.WriteLine($"  → Id={o.Id}  ProductId={o.ProductId}  Total={o.TotalPrice}");
 
-Console.WriteLine();
-Console.WriteLine("╔══════════════════════════════════════════════╗");
-Console.WriteLine("║         All operations completed.            ║");
-Console.WriteLine("╚══════════════════════════════════════════════╝");
