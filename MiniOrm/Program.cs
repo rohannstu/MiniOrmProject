@@ -62,14 +62,13 @@ Console.WriteLine($"Inserted Product  Id={mouse.Id}  Name={mouse.Name}  " +
 var keyboard = new Product
 {
     Name = "Keyboard",
-    Price = 49.99m,
+    Price = 89.99m,
     Discount = null,
-    InStock = false,
-    CreatedAt = DateTime.UtcNow
+    InStock = true
 };
-context.Products.Insert(keyboard);
-Console.WriteLine($"Inserted Product  Id={keyboard.Id}  Name={keyboard.Name}  " +
-                  $"InStock={keyboard.InStock}");
+
+int id = context.Products.Insert(keyboard);
+Console.WriteLine($"Inserted Product Id={id}  Discount=NULL ✓");
 
 // Order linked to laptop
 var order = new Order

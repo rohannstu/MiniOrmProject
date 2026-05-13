@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "5eivNPdQoJw=",
+  "dgSpecHash": "RX8tpNO7kqc=",
   "success": true,
-  "projectFilePath": "C:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\MiniOrm.csproj",
+  "projectFilePath": "c:\\Users\\rohan\\Desktop\\Codecamp\\MiniOrmProject\\MiniOrm\\MiniOrm.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\rohan\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.0\\microsoft.extensions.dependencyinjection.abstractions.10.0.0.nupkg.sha512",
     "C:\\Users\\rohan\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.0\\microsoft.extensions.logging.abstractions.10.0.0.nupkg.sha512",

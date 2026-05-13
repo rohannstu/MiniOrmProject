@@ -14,10 +14,7 @@ public class DbSet<T> where T : class, new()
         _metadata = EntityMetadata.BuildFrom<T>();
     }
 
-    // ══════════════════════════════════════════════════════════════
-    // INSERT
-    // ══════════════════════════════════════════════════════════════
-    public void Insert(T entity)
+    public int Insert(T entity)
     {
         var columnNames = _metadata.Columns.Select(c => c.ColumnName);
         var paramNames = _metadata.Columns.Select(c => $"@{c.ColumnName}");
@@ -40,8 +37,8 @@ public class DbSet<T> where T : class, new()
 
         if (returnedId != null && returnedId != DBNull.Value)
             _metadata.PrimaryKey.Property.SetValue(entity, Convert.ToInt32(returnedId));
+        return Convert.ToInt32(returnedId);
     }
- 
 
 
     public T? FindById(int id)
@@ -64,14 +61,6 @@ public class DbSet<T> where T : class, new()
     }
 
 
-    /// <summary>
-    /// Fetches every row from the table.
-    /// Returns an empty list if no rows exist — never returns null.
-    ///
-    /// Generated SQL example:
-    ///   SELECT id, name, price, discount, in_stock, created_at
-    ///   FROM products
-    /// </summary>
     public List<T> GetAll()
     {
         // ── Step 1: Build SELECT for all mapped columns ───────────────────
